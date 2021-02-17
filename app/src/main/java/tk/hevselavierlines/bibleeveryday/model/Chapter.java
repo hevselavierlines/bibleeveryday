@@ -1,9 +1,10 @@
 package tk.hevselavierlines.bibleeveryday.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Chapter {
+public class Chapter implements Serializable {
     private int number;
     private Map<Integer, Verse> verses;
     private Book book;

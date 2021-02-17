@@ -1,13 +1,28 @@
 package tk.hevselavierlines.bibleeveryday.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Bible {
+public class Bible implements Serializable {
     private String language;
     private String version;
     private Map<Integer, Book> books;
+
+    private static Bible INSTANCE;
+
+    public static Bible getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new Bible();
+        }
+        return INSTANCE;
+    }
+
+    private Bible(){}
 
     public String getLanguage() {
         return language;
@@ -32,4 +47,5 @@ public class Bible {
     public void setBooks(Map<Integer, Book> books) {
         this.books = books;
     }
+
 }

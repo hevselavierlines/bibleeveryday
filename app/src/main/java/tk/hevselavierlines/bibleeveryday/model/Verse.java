@@ -1,6 +1,8 @@
 package tk.hevselavierlines.bibleeveryday.model;
 
-public class Verse {
+import java.io.Serializable;
+
+public class Verse implements Serializable {
     private int number;
     private String text;
     private Chapter chapter;

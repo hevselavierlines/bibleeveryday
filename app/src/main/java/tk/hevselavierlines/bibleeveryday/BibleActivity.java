@@ -1,6 +1,7 @@
 package tk.hevselavierlines.bibleeveryday;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -53,11 +54,13 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     private ConstraintLayout clTextLayout;
     private TextView tvPage1;
     private TextView tvPage2;
+    private TextView tvToolbar;
     private int activeFlip;
     private FloatingActionButton fabNext;
     private FloatingActionButton fabPrev;
     private Button btNext;
     private Button btPrev;
+    private Button btToolbarSettings;
     //previous
     private Animation outFromRight;
     private Animation inFromLeft;
@@ -65,7 +68,6 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     private Animation outFromLeft;
     private Animation inFromRight;
 
-    private Bible bible;
     private Verse currentVerse;
     private int currentVerseAmount;
 
@@ -74,14 +76,14 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bible);
         toolbar = findViewById(R.id.toolbar);
+        tvToolbar = findViewById(R.id.toolbar_title);
+        btToolbarSettings = findViewById(R.id.toolbar_settings);
 
         activeFlip = 1;
         toolbar.setOnClickListener(this);
         setSupportActionBar(toolbar);
 
-
         clTextLayout = (ConstraintLayout) findViewById(R.id.textLayout);
-
         mViewFlipper = (ViewFlipper) this.findViewById(R.id.vfText);
 
         outFromLeft = AnimationUtils.loadAnimation(this, R.anim.out_from_left);
@@ -98,6 +100,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         fabPrev.setOnClickListener(this);
         btPrev.setOnClickListener(this);
         btNext.setOnClickListener(this);
+        btToolbarSettings.setOnClickListener(this);
 
         tvPage1 = (TextView) findViewById(R.id.tvPage1);
         tvPage2 = (TextView) findViewById(R.id.tvPage2);
@@ -120,6 +123,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         spe.putInt("book", currentVerse.getChapter().getBook().getNumber());
         spe.putInt("chapter", currentVerse.getChapter().getNumber());
         spe.putInt("verse", currentVerse.getNumber());
+        spe.putInt("verseAmount", currentVerseAmount);
         spe.commit();
     }
 
@@ -160,74 +164,52 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             }
         } else if (v == toolbar) {
             this.showSelectionDialog();
+        } else if (v == btToolbarSettings) {
+            Intent settingsIntent = new Intent(BibleActivity.this, SettingsActivity.class);
+            settingsIntent.putExtra("verseAmount", this.currentVerseAmount);
+            startActivityForResult(settingsIntent, 0x02);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode == 0x03 && data != null) {
+            int book = data.getIntExtra("book", this.currentVerse.getChapter().getBook().getNumber());
+            int chapter = data.getIntExtra("chapter", this.currentVerse.getChapter().getNumber());
+            int verse = data.getIntExtra("verse", this.currentVerse.getNumber());
+
+            this.currentVerse = Bible.getInstance().getBooks().get(book).getChapters().get(chapter).getVerses().get(verse);
+            Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
+            if (activeFlip == 1) {
+                tvPage1.setText(bibleText);
+            } else {
+                tvPage2.setText(bibleText);
+            }
+        } else if(requestCode == 0x02 && data != null) {
+            this.currentVerseAmount = data.getIntExtra("verseAmount", this.currentVerseAmount);
+            Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
+            if (activeFlip == 1) {
+                tvPage1.setText(bibleText);
+            } else {
+                tvPage2.setText(bibleText);
+            }
         }
     }
 
     private void showSelectionDialog() {
-//        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-//        LayoutInflater inflater = this.getLayoutInflater();
-//        View versePicker = inflater.inflate(R.layout.verse_picker, null);
-//        ListView lvBook = versePicker.findViewById(R.id.dialog_book);
-//        ListView lvChapter = versePicker.findViewById(R.id.dialog_chapter);
-//        ListView lvVerse = versePicker.findViewById(R.id.dialog_verse);
-//        String[] bookItems = new String[bible.getBooks().size()];
-//        int bookElement = 0;
-//        for(Map.Entry<String, Book> entry : bible.getBooks().entrySet()) {
-//            bookItems[bookElement++] = entry.getKey();
-//        }
-//        ArrayAdapter<String> adapterBooks = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_activated_1, android.R.id.text1, bookItems);
-//
-//        List<String> chapters = new ArrayList<String>();
-//        chapters.add("1");
-//        ArrayAdapter<String> adapterChapters = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_activated_1, android.R.id.text1, chapters);
-//        lvChapter.setAdapter(adapterChapters);
-//
-//        List<String> verses = new ArrayList<String>();
-//        ArrayAdapter<String> adapterVerses = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_activated_1, android.R.id.text1, verses);
-//        lvVerse.setAdapter(adapterVerses);
-//
-//        lvBook.setAdapter(adapterBooks);
-//        lvBook.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//        lvBook.setItemChecked(0, true);
-//        lvBook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                int index = 0;
-//                String currbookselected = null;
-//                for(String book : bible.getBooks().keySet()) {
-//                    if(index == position) {
-//                        currbookselected = book;
-//                        break;
-//                    }
-//                    index++;
-//                }
-//                if(currbookselected != null) {
-//                    chapters.clear();
-//                    for(Integer chapter : bible.getBooks().get(currbookselected).getChapters().keySet()) {
-//                        chapters.add(String.valueOf(chapter));
-//                    }
-//                    adapterChapters.notifyDataSetChanged();
-//                }
-//            }
-//        });
-//        adb.setView(versePicker);
-//        adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//            }
-//        });
-//        adb.show();
+        Intent in = new Intent(BibleActivity.this, SelectionActivity.class);
+        in.putExtra("book", this.currentVerse.getChapter().getBook().getNumber());
+        in.putExtra("chapter", this.currentVerse.getChapter().getNumber());
+        in.putExtra("verse", this.currentVerse.getNumber());
+        startActivityForResult(in, 0x03);
     }
 
     @Override
     public void bibleLoaded(Bible bible) {
-        this.bible = bible;
-
         SharedPreferences biblePref = this.getSharedPreferences("bible", MODE_PRIVATE);
-        currentVerseAmount = biblePref.getInt("verseAmount", 3);
+        currentVerseAmount = biblePref.getInt("verseAmount", 5);
         this.currentVerse = bible
                 .getBooks().get(biblePref.getInt("book", 1))
                 .getChapters().get(biblePref.getInt("chapter", 1))
@@ -235,7 +217,6 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
 
         Spanned verse = getBibleVerses(currentVerse, currentVerseAmount);
         tvPage1.setText(verse);
-        //toolbar.setTitle(currentBook + " " + currentChapter + " " + currentVerse + "-" + (currentVerse + currentVerseAmount));
     }
 
     public Spanned getBibleVerses(Verse currentVerse, int verseAmount) {
@@ -246,6 +227,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
                 verseAmount = chapterObj.countVerses() - verseStart + 1;
             }
             String verses = chapterObj.getVersesRange(verseStart, verseAmount);
+            tvToolbar.setText(chapterObj.getBook().getName() + " " + chapterObj.getNumber() + " " + currentVerse.getNumber() + "-" + (currentVerse.getNumber() + verseAmount - 1));
             toolbar.setTitle(chapterObj.getBook().getName() + " " + chapterObj.getNumber() + " " + currentVerse.getNumber() + "-" + (currentVerse.getNumber() + verseAmount - 1));
             return Html.fromHtml(verses, 0);
         } else {
