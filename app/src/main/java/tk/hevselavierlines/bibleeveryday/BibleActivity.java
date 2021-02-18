@@ -45,9 +45,10 @@ import tk.hevselavierlines.bibleeveryday.loader.MapXmlToBible;
 import tk.hevselavierlines.bibleeveryday.model.Bible;
 import tk.hevselavierlines.bibleeveryday.model.Book;
 import tk.hevselavierlines.bibleeveryday.model.Chapter;
+import tk.hevselavierlines.bibleeveryday.model.Storage;
 import tk.hevselavierlines.bibleeveryday.model.Verse;
 
-public class BibleActivity extends AppCompatActivity implements View.OnClickListener, BibleObserver {
+public class BibleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
     private ViewFlipper mViewFlipper;
@@ -105,15 +106,17 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         tvPage1 = (TextView) findViewById(R.id.tvPage1);
         tvPage2 = (TextView) findViewById(R.id.tvPage2);
 
-        tvPage1.setText("Loading...");
-        tvPage1.setLineSpacing(0f, 1.0f);
 
-        BibleLoader bibleLoader = new BibleLoader(this);
-        try {
-            bibleLoader.execute(getAssets().open("NIV.xml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        tvPage1.setLineSpacing(0f, 1.0f);
+        SharedPreferences biblePref = this.getSharedPreferences("bible", MODE_PRIVATE);
+        currentVerseAmount = biblePref.getInt("verseAmount", 5);
+        this.currentVerse = Storage.getInstance().getBible()
+                .getBooks().get(biblePref.getInt("book", 1))
+                .getChapters().get(biblePref.getInt("chapter", 1))
+                .getVerses().get(biblePref.getInt("verse", 1));
+
+        Spanned verse = getBibleVerses(currentVerse, currentVerseAmount);
+        tvPage1.setText(verse);
     }
 
     @Override
@@ -180,7 +183,20 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             int chapter = data.getIntExtra("chapter", this.currentVerse.getChapter().getNumber());
             int verse = data.getIntExtra("verse", this.currentVerse.getNumber());
 
-            this.currentVerse = Bible.getInstance().getBooks().get(book).getChapters().get(chapter).getVerses().get(verse);
+            Book currentBook = Storage.getInstance().getBible().getBooks().get(book);
+            if(currentBook == null) {
+                currentBook = Storage.getInstance().getBible().getBooks().get(1);
+            }
+            Chapter currentChapter = currentBook.getChapters().get(chapter);
+            if(currentChapter == null) {
+                currentChapter = currentBook.getChapters().get(1);
+            }
+            Verse currVerse = currentChapter.getVerses().get(verse);
+            if(currVerse == null) {
+                currVerse = currentChapter.getVerses().get(1);
+            }
+
+            this.currentVerse = currVerse;
             Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
             if (activeFlip == 1) {
                 tvPage1.setText(bibleText);
@@ -206,18 +222,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         startActivityForResult(in, 0x03);
     }
 
-    @Override
-    public void bibleLoaded(Bible bible) {
-        SharedPreferences biblePref = this.getSharedPreferences("bible", MODE_PRIVATE);
-        currentVerseAmount = biblePref.getInt("verseAmount", 5);
-        this.currentVerse = bible
-                .getBooks().get(biblePref.getInt("book", 1))
-                .getChapters().get(biblePref.getInt("chapter", 1))
-                .getVerses().get(biblePref.getInt("verse", 1));
 
-        Spanned verse = getBibleVerses(currentVerse, currentVerseAmount);
-        tvPage1.setText(verse);
-    }
 
     public Spanned getBibleVerses(Verse currentVerse, int verseAmount) {
         Chapter chapterObj = currentVerse.getChapter();

@@ -15,6 +15,7 @@ import android.view.View;
 
 import tk.hevselavierlines.bibleeveryday.model.Bible;
 import tk.hevselavierlines.bibleeveryday.model.Book;
+import tk.hevselavierlines.bibleeveryday.model.Storage;
 import tk.hevselavierlines.bibleeveryday.ui.main.PlaceholderFragment;
 import tk.hevselavierlines.bibleeveryday.ui.main.SectionsPagerAdapter;
 
@@ -43,7 +44,7 @@ public class SelectionActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        this.bible = Bible.getInstance();
+        this.bible = Storage.getInstance().getBible();
         FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,11 +82,14 @@ public class SelectionActivity extends AppCompatActivity {
 
     public void switchToChapter() {
         this.fragments[1].updateSelection(1, this.selectionBook);
+        this.setSelectionChapter(1);
+        this.setSelectionVerse(1);
         tabs.getTabAt(1).select();
     }
 
     public void switchToVerse() {
         this.fragments[2].updateSelection(2, this.selectionChapter);
+        this.setSelectionVerse(1);
         tabs.getTabAt(2).select();
     }
 

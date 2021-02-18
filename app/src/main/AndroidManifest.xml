@@ -9,7 +9,14 @@
         android:roundIcon="@drawable/bible"
         android:supportsRtl="true"
         android:theme="@style/Theme.BibleEveryDay">
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".StartupActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SettingsActivity" />
         <activity
             android:name=".SelectionActivity"
             android:label="@string/title_activity_selection"
@@ -18,11 +25,6 @@
             android:name=".BibleActivity"
             android:label="@string/title_activity_bible"
             android:theme="@style/Theme.BibleEveryDay.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

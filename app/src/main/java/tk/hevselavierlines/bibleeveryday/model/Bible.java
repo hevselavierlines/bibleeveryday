@@ -13,17 +13,6 @@ public class Bible implements Serializable {
     private String version;
     private Map<Integer, Book> books;
 
-    private static Bible INSTANCE;
-
-    public static Bible getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new Bible();
-        }
-        return INSTANCE;
-    }
-
-    private Bible(){}
-
     public String getLanguage() {
         return language;
     }

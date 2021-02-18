@@ -27,6 +27,7 @@ import tk.hevselavierlines.bibleeveryday.SelectionActivity;
 import tk.hevselavierlines.bibleeveryday.model.Bible;
 import tk.hevselavierlines.bibleeveryday.model.Book;
 import tk.hevselavierlines.bibleeveryday.model.Chapter;
+import tk.hevselavierlines.bibleeveryday.model.Storage;
 import tk.hevselavierlines.bibleeveryday.model.Verse;
 
 /**
@@ -37,6 +38,7 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
     private int index;
     private ArrayAdapter<String> arrayAdapter;
     private List<String> gridViewList;
+    private GridView gridView;
 
     public List<String> getGridViewList() {
         return gridViewList;
@@ -57,22 +59,27 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
 
     public void updateSelection(int viewIndex, int selectionIndex) {
         if(viewIndex == 1) {
+            gridView.setItemChecked(0, true);
             gridViewList.clear();
-            Book book = Bible.getInstance().getBooks().get(selectionIndex);
+            Book book = Storage.getInstance().getBible().getBooks().get(selectionIndex);
             for(Map.Entry<Integer, Chapter> chapter : book.getChapters().entrySet()) {
                 gridViewList.add(String.valueOf(chapter.getKey()));
             }
             arrayAdapter.notifyDataSetChanged();
+            gridView.smoothScrollToPosition(selectionIndex);
         } else if(viewIndex == 2) {
             SelectionActivity selectionActivity = (SelectionActivity) getActivity();
             PlaceholderFragment fragment = selectionActivity.getFragment(2);
             fragment.getGridViewList().clear();
-            Chapter chapter = Bible.getInstance().getBooks().get(selectionActivity.getSelectionBook()).getChapters().get(selectionIndex);
+            Chapter chapter = Storage.getInstance().getBible()
+                    .getBooks().get(selectionActivity.getSelectionBook())
+                    .getChapters().get(selectionIndex);
             for(Map.Entry<Integer, Verse> verse : chapter.getVerses().entrySet()) {
                 fragment.getGridViewList().add(String.valueOf(verse.getKey()));
             }
             fragment.getArrayAdapter().notifyDataSetChanged();
             arrayAdapter.notifyDataSetChanged();
+            gridView.smoothScrollToPosition(selectionIndex);
         }
     }
 
@@ -81,21 +88,30 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_selection, container, false);
-        GridView gridView = root.findViewById(R.id.selectionGrid);
+        gridView = root.findViewById(R.id.selectionGrid);
         gridView.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
 
         SelectionActivity selectionActivity = (SelectionActivity) getActivity();
         gridViewList = new ArrayList<>();
         if(index == 0) {
-            for (Map.Entry<Integer, Book> book : Bible.getInstance().getBooks().entrySet()) {
+            for (Map.Entry<Integer, Book> book : Storage.getInstance().getBible().getBooks().entrySet()) {
                 gridViewList.add(book.getValue().getName());
             }
         } else if(index == 1) {
-            for (Map.Entry<Integer, Chapter> chapter : Bible.getInstance().getBooks().get(selectionActivity.getSelectionBook()).getChapters().entrySet()) {
+            for (Map.Entry<Integer, Chapter> chapter : Storage.getInstance().getBible()
+                    .getBooks().get(selectionActivity.getSelectionBook())
+                    .getChapters().entrySet()) {
                 gridViewList.add(String.valueOf(chapter.getKey()));
             }
         } else if(index == 2) {
-            for (Map.Entry<Integer, Verse> verse : Bible.getInstance().getBooks().get(selectionActivity.getSelectionBook()).getChapters().get(selectionActivity.getSelectionChapter()).getVerses().entrySet()) {
+            Map<Integer, Chapter> chapters = Storage.getInstance().getBible()
+                    .getBooks().get(selectionActivity.getSelectionBook())
+                    .getChapters();
+            if(selectionActivity.getSelectionChapter() >= chapters.size()) {
+                selectionActivity.setSelectionChapter(chapters.size() - 1);
+            }
+            for (Map.Entry<Integer, Verse> verse : chapters
+                    .get(selectionActivity.getSelectionChapter()).getVerses().entrySet()) {
                 gridViewList.add(String.valueOf(verse.getKey()));
             }
         }
@@ -103,21 +119,26 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
         arrayAdapter = new ArrayAdapter<String>(getContext(),
                 R.layout.biblelist, android.R.id.text1, gridViewList);
         gridView.setAdapter(arrayAdapter);
-
+        int selIndex = 0;
         if(index == 0) {
-            gridView.setItemChecked(selectionActivity.getSelectionBook() - 1, true);
+            selIndex = selectionActivity.getSelectionBook() - 1;
         } else if(index == 1) {
-            gridView.setItemChecked(selectionActivity.getSelectionChapter() - 1, true);
+            selIndex = selectionActivity.getSelectionChapter() - 1;
         } else if(index == 2) {
-            gridView.setItemChecked(selectionActivity.getSelectionVerse() - 1, true);
+            selIndex = selectionActivity.getSelectionVerse() - 1;
         }
+        if(selIndex > gridViewList.size() - 1) {
+            selIndex = 0;
+        }
+        gridView.setItemChecked(selIndex, true);
+        gridView.smoothScrollToPosition(selIndex);
         gridView.setOnItemClickListener(this);
         return root;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bible bible = Bible.getInstance();
+        Bible bible = Storage.getInstance().getBible();
         SelectionActivity selectionActivity = (SelectionActivity) getActivity();
         if(index == 0) {
             Book book = bible.getBooks().get(position + 1);

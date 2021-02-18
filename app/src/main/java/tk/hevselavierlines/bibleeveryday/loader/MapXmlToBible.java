@@ -64,7 +64,7 @@ public class MapXmlToBible extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if("bible".equals(localName)) {
-            bible = Bible.getInstance();
+            bible = new Bible();
         }
         if("b".equals(localName)) {
             currentBook = new Book();
