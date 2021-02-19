@@ -108,15 +108,32 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
 
 
         tvPage1.setLineSpacing(0f, 1.0f);
-        SharedPreferences biblePref = this.getSharedPreferences("bible", MODE_PRIVATE);
-        currentVerseAmount = biblePref.getInt("verseAmount", 5);
-        this.currentVerse = Storage.getInstance().getBible()
-                .getBooks().get(biblePref.getInt("book", 1))
-                .getChapters().get(biblePref.getInt("chapter", 1))
-                .getVerses().get(biblePref.getInt("verse", 1));
+
+        this.loadCurrentVerse();
+
 
         Spanned verse = getBibleVerses(currentVerse, currentVerseAmount);
         tvPage1.setText(verse);
+    }
+
+    private void loadCurrentVerse() {
+        SharedPreferences biblePref = this.getSharedPreferences("bible", MODE_PRIVATE);
+        currentVerseAmount = biblePref.getInt("verseAmount", 5);
+        Bible bible = Storage.getInstance().getBible();
+        Book book = bible.getBooks().get(biblePref.getInt("book", 1));
+        if(book != null) {
+            Chapter chapter = book.getChapters().get(biblePref.getInt("chapter", 1));
+            if(chapter != null) {
+                Verse verse = chapter.getVerses().get(biblePref.getInt("verse", 1));
+                this.currentVerse = verse;
+            }
+        }
+        if(this.currentVerse == null) {
+            this.currentVerse = Storage.getInstance().getBible()
+                    .getBooks().get(1)
+                    .getChapters().get(1)
+                    .getVerses().get(1);
+        }
     }
 
     @Override
