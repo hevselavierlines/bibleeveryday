@@ -90,7 +90,7 @@ public class Chapter implements Serializable {
         for(int i = 0; i < amount; i++) {
             Verse currVerse = verses.get(curr);
             if(currVerse != null) {
-                sb.append("<sup><b>");
+                sb.append("<span><b>");
                 sb.append(curr);
                 sb.append("</b></sup> ");
                 sb.append(currVerse.getText());

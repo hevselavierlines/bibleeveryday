@@ -23,7 +23,7 @@ public class StartupActivity extends AppCompatActivity implements BibleObserver 
 
         BibleLoader bibleLoader = new BibleLoader(this);
         try {
-            bibleLoader.execute(getAssets().open("NIV.xml"));
+            bibleLoader.execute(getAssets().open("volxbible.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

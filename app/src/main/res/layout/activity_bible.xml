@@ -37,7 +37,11 @@
                 <Button
                     android:id="@+id/toolbar_settings"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:insetLeft="40dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
                     app:icon="@android:drawable/ic_menu_manage" />
 
             </LinearLayout>
