@@ -42,6 +42,7 @@
                     android:insetTop="0dp"
                     android:insetRight="0dp"
                     android:insetBottom="0dp"
+                    android:visibility="visible"
                     app:icon="@android:drawable/ic_menu_manage" />
 
             </LinearLayout>
@@ -56,7 +57,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="22dp"
-        android:layout_marginBottom="10dp"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,23 +82,5 @@
         android:layout_weight="1"
         android:visibility="visible" />
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="0dp"
-        app:backgroundTint="@android:color/darker_gray"
-        app:srcCompat="@android:drawable/ic_media_next" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabPrev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="0dp"
-        app:backgroundTint="@android:color/darker_gray"
-        app:srcCompat="@android:drawable/ic_media_previous" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

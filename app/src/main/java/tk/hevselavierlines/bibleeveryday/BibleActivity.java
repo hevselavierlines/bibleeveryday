@@ -22,6 +22,7 @@ import android.text.Layout;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +48,9 @@ import tk.hevselavierlines.bibleeveryday.model.Book;
 import tk.hevselavierlines.bibleeveryday.model.Chapter;
 import tk.hevselavierlines.bibleeveryday.model.Storage;
 import tk.hevselavierlines.bibleeveryday.model.Verse;
+import tk.hevselavierlines.bibleeveryday.ui.main.PaginationController;
 
-public class BibleActivity extends AppCompatActivity implements View.OnClickListener {
+public class BibleActivity extends AppCompatActivity implements View.OnClickListener, PaginationController.PageUpdateListener {
 
     private Toolbar toolbar;
     private ViewFlipper mViewFlipper;
@@ -57,8 +59,6 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     private TextView tvPage2;
     private TextView tvToolbar;
     private int activeFlip;
-    private FloatingActionButton fabNext;
-    private FloatingActionButton fabPrev;
     private Button btNext;
     private Button btPrev;
     private Button btToolbarSettings;
@@ -69,8 +69,11 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     private Animation outFromLeft;
     private Animation inFromRight;
 
-    private Verse currentVerse;
-    private int currentVerseAmount;
+    private Chapter currentChapter;
+    private int currentVerse;
+
+    private PaginationController paginationController;
+    private int textSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,46 +96,51 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         outFromRight = AnimationUtils.loadAnimation(this, R.anim.out_from_right);
         inFromLeft = AnimationUtils.loadAnimation(this, R.anim.in_from_left);
 
-        fabNext = findViewById(R.id.fabNext);
-        fabPrev = findViewById(R.id.fabPrev);
         btPrev = findViewById(R.id.btPrev);
         btNext = findViewById(R.id.btNext);
-        fabNext.setOnClickListener(this);
-        fabPrev.setOnClickListener(this);
         btPrev.setOnClickListener(this);
         btNext.setOnClickListener(this);
         btToolbarSettings.setOnClickListener(this);
 
+
+
         tvPage1 = (TextView) findViewById(R.id.tvPage1);
         tvPage2 = (TextView) findViewById(R.id.tvPage2);
 
-
-        tvPage1.setLineSpacing(0f, 1.0f);
+        paginationController = new PaginationController(tvPage1, tvPage2, this);
 
         this.loadCurrentVerse();
 
 
-        Spanned verse = getBibleVerses(currentVerse, currentVerseAmount);
-        tvPage1.setText(verse);
+//        Spanned verse = getBibleVerses(currentVerse, currentVerseAmount);
+//        tvPage1.setText(verse);
+    }
+
+    void firstSetText(Chapter chapter) {
+        Spanned text = Html.fromHtml(chapter.toString(), 0);
+        // start displaying loading here
+        paginationController.onTextLoaded(text, true);
+    }
+
+    void updateText(Chapter chapter) {
+        Spanned text = Html.fromHtml(chapter.toString(), 0);
+        paginationController.onTextLoaded(text, false);
     }
 
     private void loadCurrentVerse() {
         SharedPreferences biblePref = this.getSharedPreferences("bible", MODE_PRIVATE);
-        currentVerseAmount = biblePref.getInt("verseAmount", 5);
+        textSize = biblePref.getInt("textSize", 25);
+        setTextSize();
         Bible bible = Storage.getInstance().getBible();
         Book book = bible.getBooks().get(biblePref.getInt("book", 1));
         if(book != null) {
             Chapter chapter = book.getChapters().get(biblePref.getInt("chapter", 1));
             if(chapter != null) {
-                Verse verse = chapter.getVerses().get(biblePref.getInt("verse", 1));
-                this.currentVerse = verse;
+                this.currentChapter = chapter;
+                firstSetText(chapter);
+                int verse = biblePref.getInt("verse", 1);
+                paginationController.openVerse(verse);
             }
-        }
-        if(this.currentVerse == null) {
-            this.currentVerse = Storage.getInstance().getBible()
-                    .getBooks().get(1)
-                    .getChapters().get(1)
-                    .getVerses().get(1);
         }
     }
 
@@ -140,53 +148,53 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor spe = this.getSharedPreferences("bible", MODE_PRIVATE).edit();
-        spe.putInt("book", currentVerse.getChapter().getBook().getNumber());
-        spe.putInt("chapter", currentVerse.getChapter().getNumber());
-        spe.putInt("verse", currentVerse.getNumber());
-        spe.putInt("verseAmount", currentVerseAmount);
+        spe.putInt("book", currentChapter.getBook().getNumber());
+        spe.putInt("chapter", currentChapter.getNumber());
+        spe.putInt("verse", currentVerse);
+        spe.putInt("textSize", textSize);
         spe.commit();
     }
 
     @Override
     public void onClick(View v) {
-        if (v == fabPrev || v == btPrev) {
-            if (currentVerse != null) {
-                mViewFlipper.setOutAnimation(outFromRight);
-                mViewFlipper.setInAnimation(inFromLeft);
+        if (v == btPrev) {
+            mViewFlipper.setOutAnimation(outFromRight);
+            mViewFlipper.setInAnimation(inFromLeft);
 
-                currentVerse = currentVerse.getPreviousVerse(currentVerseAmount);
-                Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
-                if (activeFlip == 1) {
-                    tvPage2.setText(bibleText);
-                    activeFlip = 2;
-                } else {
-                    tvPage1.setText(bibleText);
-                    activeFlip = 1;
-                }
-
+            if(paginationController.isPreviousEnabled()) {
+                paginationController.previous();
                 mViewFlipper.showPrevious();
-            }
-        } else if (v == fabNext || v == btNext) {
-            if (currentVerse != null) {
-                mViewFlipper.setOutAnimation(outFromLeft);
-                mViewFlipper.setInAnimation(inFromRight);
-                currentVerse = currentVerse.getNextVerse(currentVerseAmount);
-
-                Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
-                if (activeFlip == 1) {
-                    tvPage2.setText(bibleText);
-                    activeFlip = 2;
-                } else {
-                    tvPage1.setText(bibleText);
-                    activeFlip = 1;
+            } else {
+                Chapter prevChapter = Chapter.getPreviousChapter(currentChapter);
+                if(prevChapter != null) {
+                    currentChapter = prevChapter;
+                    this.currentVerse = currentChapter.countVerses();
+                    updateText(currentChapter);
+                    paginationController.openLastPage();
+                    mViewFlipper.showPrevious();
                 }
+            }
+        } else if (v == btNext) {
+            mViewFlipper.setOutAnimation(outFromLeft);
+            mViewFlipper.setInAnimation(inFromRight);
+
+            if(paginationController.isNextEnabled()) {
+                paginationController.next();
                 mViewFlipper.showNext();
+            } else {
+                Chapter nextChapter = Chapter.getNextChapter(currentChapter);
+                if(nextChapter != null) {
+                    currentChapter = nextChapter;
+                    updateText(currentChapter);
+                    paginationController.openFirstPage();
+                    mViewFlipper.showNext();
+                }
             }
         } else if (v == toolbar) {
             this.showSelectionDialog();
         } else if (v == btToolbarSettings) {
             Intent settingsIntent = new Intent(BibleActivity.this, SettingsActivity.class);
-            settingsIntent.putExtra("verseAmount", this.currentVerseAmount);
+            settingsIntent.putExtra("textSize", this.textSize);
             startActivityForResult(settingsIntent, 0x02);
         }
     }
@@ -196,9 +204,9 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
         if(requestCode == 0x03 && data != null) {
-            int book = data.getIntExtra("book", this.currentVerse.getChapter().getBook().getNumber());
-            int chapter = data.getIntExtra("chapter", this.currentVerse.getChapter().getNumber());
-            int verse = data.getIntExtra("verse", this.currentVerse.getNumber());
+            int book = data.getIntExtra("book", this.currentChapter.getBook().getNumber());
+            int chapter = data.getIntExtra("chapter", this.currentChapter.getNumber());
+            int verse = data.getIntExtra("verse", 1);
 
             Book currentBook = Storage.getInstance().getBible().getBooks().get(book);
             if(currentBook == null) {
@@ -208,53 +216,49 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             if(currentChapter == null) {
                 currentChapter = currentBook.getChapters().get(1);
             }
-            Verse currVerse = currentChapter.getVerses().get(verse);
-            if(currVerse == null) {
-                currVerse = currentChapter.getVerses().get(1);
-            }
-
-            this.currentVerse = currVerse;
-            Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
-            if (activeFlip == 1) {
-                tvPage1.setText(bibleText);
-            } else {
-                tvPage2.setText(bibleText);
-            }
+            this.currentChapter = currentChapter;
+            updateText(this.currentChapter);
+            paginationController.openVerse(verse);
         } else if(requestCode == 0x02 && data != null) {
-            this.currentVerseAmount = data.getIntExtra("verseAmount", this.currentVerseAmount);
-            Spanned bibleText = getBibleVerses(currentVerse, currentVerseAmount);
-            if (activeFlip == 1) {
-                tvPage1.setText(bibleText);
-            } else {
-                tvPage2.setText(bibleText);
-            }
+            this.textSize = data.getIntExtra("textSize", this.textSize);
+            setTextSize();
+            updateText(this.currentChapter);
+            paginationController.openVerse(currentVerse);
         }
     }
 
     private void showSelectionDialog() {
         Intent in = new Intent(BibleActivity.this, SelectionActivity.class);
-        in.putExtra("book", this.currentVerse.getChapter().getBook().getNumber());
-        in.putExtra("chapter", this.currentVerse.getChapter().getNumber());
-        in.putExtra("verse", this.currentVerse.getNumber());
+        in.putExtra("book", this.currentChapter.getBook().getNumber());
+        in.putExtra("chapter", this.currentChapter.getNumber());
+        in.putExtra("verse", currentVerse);
         startActivityForResult(in, 0x03);
     }
 
 
 
-    public Spanned getBibleVerses(Verse currentVerse, int verseAmount) {
-        Chapter chapterObj = currentVerse.getChapter();
-        int verseStart = currentVerse.getNumber();
-        if (chapterObj != null) {
-            if ((verseStart + verseAmount - 1) > chapterObj.countVerses()) {
-                verseAmount = chapterObj.countVerses() - verseStart + 1;
-            }
-            String verses = chapterObj.getVersesRange(verseStart, verseAmount);
-            tvToolbar.setText(chapterObj.getBook().getName() + " " + chapterObj.getNumber() + " " + currentVerse.getNumber() + "-" + (currentVerse.getNumber() + verseAmount - 1));
-            toolbar.setTitle(chapterObj.getBook().getName() + " " + chapterObj.getNumber() + " " + currentVerse.getNumber() + "-" + (currentVerse.getNumber() + verseAmount - 1));
-            return Html.fromHtml(verses, 0);
-        } else {
-            return Html.fromHtml("<h1>ERROR</h1>");
+    @Override
+    public void updatePage(int startVerse, int endVerse) {
+        if(startVerse == 0) {
+            startVerse = this.currentVerse;
+            endVerse = this.currentVerse;
         }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(currentChapter.getBook().getName());
+        sb.append(' ');
+        sb.append(currentChapter.getNumber());
+        sb.append(' ');
+        sb.append(startVerse);
+        sb.append('-');
+        sb.append(endVerse);
+        tvToolbar.setText(sb.toString());
+        this.currentVerse = endVerse;
+    }
+
+    public void setTextSize() {
+        tvPage1.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        tvPage2.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
     }
 
 }

@@ -83,6 +83,10 @@ public class Chapter implements Serializable {
         return currentBook.getChapters().get(chapterNumber);
     }
 
+    public String toString() {
+        return getVersesRange(1, countVerses());
+    }
+
     public String getVersesRange(int start, int amount) {
         StringBuilder sb = new StringBuilder();
         sb.append("<p>");

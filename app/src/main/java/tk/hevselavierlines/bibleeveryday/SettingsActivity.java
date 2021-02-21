@@ -21,16 +21,16 @@ public class SettingsActivity extends AppCompatActivity {
         etVerses = findViewById(R.id.etSettingsVerses);
         btSave = findViewById(R.id.btSettingsSave);
 
-        int verses = getIntent().getIntExtra("verseAmount", 5);
+        int textSize = getIntent().getIntExtra("textSize", 25);
 
-        etVerses.setText(String.valueOf(verses));
+        etVerses.setText(String.valueOf(textSize));
 
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent result = new Intent();
-                result.putExtra("verseAmount", Integer.parseInt(etVerses.getText().toString()));
+                result.putExtra("textSize", Integer.parseInt(etVerses.getText().toString()));
                 setResult(0x03, result);
                 finish();
             }
