@@ -1,53 +1,26 @@
 package tk.hevselavierlines.bibleeveryday;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.text.Html;
-import android.text.Layout;
-import android.text.Spanned;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import tk.hevselavierlines.bibleeveryday.loader.BibleLoader;
-import tk.hevselavierlines.bibleeveryday.loader.BibleObserver;
-import tk.hevselavierlines.bibleeveryday.loader.MapXmlToBible;
 import tk.hevselavierlines.bibleeveryday.model.Bible;
 import tk.hevselavierlines.bibleeveryday.model.Book;
 import tk.hevselavierlines.bibleeveryday.model.Chapter;
 import tk.hevselavierlines.bibleeveryday.model.Storage;
-import tk.hevselavierlines.bibleeveryday.model.Verse;
 import tk.hevselavierlines.bibleeveryday.ui.main.PaginationController;
 
 public class BibleActivity extends AppCompatActivity implements View.OnClickListener, PaginationController.PageUpdateListener {
@@ -61,6 +34,8 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     private int activeFlip;
     private Button btNext;
     private Button btPrev;
+    private Button toolbarPrev;
+    private Button toolbarNext;
     private Button btToolbarSettings;
     //previous
     private Animation outFromRight;
@@ -83,6 +58,9 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         tvToolbar = findViewById(R.id.toolbar_title);
         btToolbarSettings = findViewById(R.id.toolbar_settings);
 
+        toolbarPrev = findViewById(R.id.bible_back);
+        toolbarNext = findViewById(R.id.bible_forward);
+
         activeFlip = 1;
         toolbar.setOnClickListener(this);
         setSupportActionBar(toolbar);
@@ -99,9 +77,11 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         btPrev = findViewById(R.id.btPrev);
         btNext = findViewById(R.id.btNext);
         btPrev.setOnClickListener(this);
+        toolbarPrev.setOnClickListener(this);
         btNext.setOnClickListener(this);
+        toolbarNext.setOnClickListener(this);
         btToolbarSettings.setOnClickListener(this);
-
+        tvToolbar.setOnClickListener(this);
 
 
         tvPage1 = (TextView) findViewById(R.id.tvPage1);
@@ -157,7 +137,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v == btPrev) {
+        if (v == btPrev || v == toolbarPrev || v == toolbar) {
             mViewFlipper.setOutAnimation(outFromRight);
             mViewFlipper.setInAnimation(inFromLeft);
 
@@ -174,7 +154,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
                     mViewFlipper.showPrevious();
                 }
             }
-        } else if (v == btNext) {
+        } else if (v == btNext || v == toolbarNext) {
             mViewFlipper.setOutAnimation(outFromLeft);
             mViewFlipper.setInAnimation(inFromRight);
 
@@ -190,7 +170,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
                     mViewFlipper.showNext();
                 }
             }
-        } else if (v == toolbar) {
+        } else if (v == tvToolbar) {
             this.showSelectionDialog();
         } else if (v == btToolbarSettings) {
             Intent settingsIntent = new Intent(BibleActivity.this, SettingsActivity.class);

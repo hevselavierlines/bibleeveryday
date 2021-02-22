@@ -6,6 +6,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +36,11 @@ public class SelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
 
+        Toolbar toolbar = findViewById(R.id.selectionToolbar);
+        toolbar.setTitle("Select Bible Verse");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         this.selectionBook = getIntent().getIntExtra("book", 1);
         this.selectionChapter = getIntent().getIntExtra("chapter", 1);
         this.selectionVerse = getIntent().getIntExtra("verse", 1);
@@ -45,15 +52,6 @@ public class SelectionActivity extends AppCompatActivity {
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         this.bible = Storage.getInstance().getBible();
-        FloatingActionButton fab = findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SelectionActivity.this.setResult(0x03);
-                SelectionActivity.this.finish();
-            }
-        });
     }
 
     public int getSelectionBook() {
@@ -102,5 +100,11 @@ public class SelectionActivity extends AppCompatActivity {
 
     public PlaceholderFragment getFragment(int index) {
         return fragments[index];
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 }
