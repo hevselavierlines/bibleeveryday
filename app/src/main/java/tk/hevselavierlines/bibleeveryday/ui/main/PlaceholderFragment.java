@@ -122,10 +122,13 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
         int selIndex = 0;
         if(index == 0) {
             selIndex = selectionActivity.getSelectionBook() - 1;
+            gridView.setNumColumns(3);
         } else if(index == 1) {
             selIndex = selectionActivity.getSelectionChapter() - 1;
+            gridView.setNumColumns(5);
         } else if(index == 2) {
             selIndex = selectionActivity.getSelectionVerse() - 1;
+            gridView.setNumColumns(5);
         }
         if(selIndex > gridViewList.size() - 1) {
             selIndex = 0;

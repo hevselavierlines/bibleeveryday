@@ -22,8 +22,10 @@ public class StartupActivity extends AppCompatActivity implements BibleObserver 
         setContentView(R.layout.activity_startup);
 
         BibleLoader bibleLoader = new BibleLoader(this);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("bible", MODE_PRIVATE);
+        String version = sharedPreferences.getString("version", "NIV") + ".xml";
         try {
-            bibleLoader.execute(getAssets().open("volxbible.xml"));
+            bibleLoader.execute(getAssets().open(version));
         } catch (IOException e) {
             e.printStackTrace();
         }
