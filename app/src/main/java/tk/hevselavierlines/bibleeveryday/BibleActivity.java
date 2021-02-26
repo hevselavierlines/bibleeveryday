@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.TypedValue;
@@ -18,12 +17,12 @@ import android.widget.ViewFlipper;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import tk.hevselavierlines.bibleeveryday.model.Bible;
 import tk.hevselavierlines.bibleeveryday.model.Book;
 import tk.hevselavierlines.bibleeveryday.model.Chapter;
 import tk.hevselavierlines.bibleeveryday.model.Storage;
+import tk.hevselavierlines.bibleeveryday.ui.main.PageSwipeTouchListener;
 import tk.hevselavierlines.bibleeveryday.ui.main.PaginationController;
 
 public class BibleActivity extends AppCompatActivity implements View.OnClickListener, PaginationController.PageUpdateListener {
@@ -33,8 +32,6 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
     private TextView tvPage1;
     private TextView tvPage2;
     private TextView tvToolbar;
-    private Button btNext;
-    private Button btPrev;
     private Button toolbarPrev;
     private Button toolbarNext;
     private Button btToolbarSettings;
@@ -75,11 +72,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             outFromRight = AnimationUtils.loadAnimation(this, R.anim.out_from_right);
             inFromLeft = AnimationUtils.loadAnimation(this, R.anim.in_from_left);
 
-            btPrev = findViewById(R.id.btPrev);
-            btNext = findViewById(R.id.btNext);
-            btPrev.setOnClickListener(this);
             toolbarPrev.setOnClickListener(this);
-            btNext.setOnClickListener(this);
             toolbarNext.setOnClickListener(this);
             btToolbarSettings.setOnClickListener(this);
             tvToolbar.setOnClickListener(this);
@@ -89,6 +82,22 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             tvPage2 = (TextView) findViewById(R.id.tvPage2);
 
             paginationController = new PaginationController(tvPage1, tvPage2, this);
+            PageSwipeTouchListener pageSwipeTouchListener = new PageSwipeTouchListener(new PageSwipeTouchListener.PageChangeListener() {
+                @Override
+                public void previousPage() {
+                    gotoPreviousPage();
+                }
+
+                @Override
+                public void nextPage() {
+                    gotoNextPage();
+                }
+
+                @Override
+                public void showMenu() {
+                    showSelectionDialog();
+                }
+            }, tvPage1, tvPage2);
 
             if (Storage.getInstance().getBible() != null) {
                 this.loadCurrentVerse();
@@ -142,7 +151,6 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
 
     protected void onRestart() {
         super.onRestart();
-
     }
 
     @Override
@@ -161,41 +169,49 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
         spe.apply();
     }
 
+    protected void gotoNextPage() {
+        mViewFlipper.setOutAnimation(outFromLeft);
+        mViewFlipper.setInAnimation(inFromRight);
+
+        if(paginationController.isNextEnabled()) {
+            paginationController.next();
+            mViewFlipper.showNext();
+        } else {
+            Chapter nextChapter = Chapter.getNextChapter(currentChapter);
+            if(nextChapter != null) {
+                currentChapter = nextChapter;
+                updateText(currentChapter);
+                paginationController.openFirstPage();
+                mViewFlipper.showNext();
+            }
+        }
+    }
+
+    protected void gotoPreviousPage() {
+        mViewFlipper.setOutAnimation(outFromRight);
+        mViewFlipper.setInAnimation(inFromLeft);
+
+        if(paginationController.isPreviousEnabled()) {
+            paginationController.previous();
+            mViewFlipper.showPrevious();
+        } else {
+            Chapter prevChapter = Chapter.getPreviousChapter(currentChapter);
+            if(prevChapter != null) {
+                currentChapter = prevChapter;
+                this.currentVerse = currentChapter.countVerses();
+                updateText(currentChapter);
+                paginationController.openLastPage();
+                mViewFlipper.showPrevious();
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
-        if (v == btPrev || v == toolbarPrev || v == toolbar) {
-            mViewFlipper.setOutAnimation(outFromRight);
-            mViewFlipper.setInAnimation(inFromLeft);
-
-            if(paginationController.isPreviousEnabled()) {
-                paginationController.previous();
-                mViewFlipper.showPrevious();
-            } else {
-                Chapter prevChapter = Chapter.getPreviousChapter(currentChapter);
-                if(prevChapter != null) {
-                    currentChapter = prevChapter;
-                    this.currentVerse = currentChapter.countVerses();
-                    updateText(currentChapter);
-                    paginationController.openLastPage();
-                    mViewFlipper.showPrevious();
-                }
-            }
-        } else if (v == btNext || v == toolbarNext) {
-            mViewFlipper.setOutAnimation(outFromLeft);
-            mViewFlipper.setInAnimation(inFromRight);
-
-            if(paginationController.isNextEnabled()) {
-                paginationController.next();
-                mViewFlipper.showNext();
-            } else {
-                Chapter nextChapter = Chapter.getNextChapter(currentChapter);
-                if(nextChapter != null) {
-                    currentChapter = nextChapter;
-                    updateText(currentChapter);
-                    paginationController.openFirstPage();
-                    mViewFlipper.showNext();
-                }
-            }
+        if (v == toolbarPrev || v == toolbar) {
+            gotoPreviousPage();
+        } else if (v == toolbarNext) {
+            gotoNextPage();
         } else if (v == tvToolbar) {
             this.showSelectionDialog();
         } else if (v == btToolbarSettings) {

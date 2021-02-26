@@ -90,30 +90,5 @@
         layout="@layout/content_bible"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="2"
-        android:orientation="horizontal">
-
-    <Button
-        android:id="@+id/btPrev"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom|end"
-        android:background="#00000000"
-        android:layout_weight="1"
-        android:visibility="visible" />
-
-    <Button
-        android:id="@+id/btNext"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom|end"
-        android:background="#00000000"
-        android:textStyle="normal"
-        android:layout_weight="1"
-        android:visibility="visible" />
-    </LinearLayout>
 
 </RelativeLayout>

@@ -186,7 +186,7 @@ public class PaginationController {
 
             //check is latest line fully visible
             if (mTextView.getHeight() < layout.getLineBottom(lastVisibleLineNumber)) {
-                lastVisibleLineNumber--;
+                lastVisibleLineNumber-=2;
             }
 
             int start = pageStartSymbol + mTextView.getLayout().getLineStart(firstVisibleLineNumber);
