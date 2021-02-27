@@ -16,9 +16,7 @@ import android.widget.SpinnerAdapter;
 public class SettingsActivity extends AppCompatActivity {
 
     private EditText etVerses;
-    private Button btSave;
     private Spinner spBibleVersion;
-    private SeekBar sbTextSize;
     private final String[] BIBLE_VERSIONS = new String[] {"NIV", "schlachter", "volxbible"};
 
     @Override
@@ -28,8 +26,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         etVerses = findViewById(R.id.etSettingsVerses);
         spBibleVersion = findViewById(R.id.spBibleVersion);
-        btSave = findViewById(R.id.btSettingsSave);
-        sbTextSize = findViewById(R.id.sbTextSize);
+        Button btSave = findViewById(R.id.btSettingsSave);
+        Button btCancel = findViewById(R.id.btSettingsCancel);
+        SeekBar sbTextSize = findViewById(R.id.sbTextSize);
 
         int textSize = getIntent().getIntExtra("textSize", 25);
         String currentVersion = getIntent().getStringExtra("version");
@@ -56,13 +55,17 @@ public class SettingsActivity extends AppCompatActivity {
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent result = new Intent();
-                result.putExtra("textSize", Integer.parseInt(etVerses.getText().toString()));
-                result.putExtra("version", spBibleVersion.getSelectedItem().toString());
-                setResult(0x03, result);
+                sendResultToReturn();
+            }
+        });
+
+        btCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });
+
         sbTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -85,11 +88,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        sendResultToReturn();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void sendResultToReturn() {
         Intent result = new Intent();
         result.putExtra("textSize", Integer.parseInt(etVerses.getText().toString()));
         result.putExtra("version", spBibleVersion.getSelectedItem().toString());
         setResult(0x03, result);
         finish();
-        return super.onOptionsItemSelected(item);
     }
 }

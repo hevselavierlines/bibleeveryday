@@ -2,6 +2,8 @@ package tk.hevselavierlines.bibleeveryday.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.Selection;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,10 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
 
     public ArrayAdapter<String> getArrayAdapter() {
         return arrayAdapter;
+    }
+
+    public PlaceholderFragment() {
+
     }
 
     public PlaceholderFragment(int index) {
@@ -108,7 +114,7 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
                     .getBooks().get(selectionActivity.getSelectionBook())
                     .getChapters();
             if(selectionActivity.getSelectionChapter() >= chapters.size()) {
-                selectionActivity.setSelectionChapter(chapters.size() - 1);
+                selectionActivity.setSelectionChapter(chapters.size());
             }
             for (Map.Entry<Integer, Verse> verse : chapters
                     .get(selectionActivity.getSelectionChapter()).getVerses().entrySet()) {
@@ -162,4 +168,5 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemC
             selectionActivity.finish();
         }
     }
+
 }

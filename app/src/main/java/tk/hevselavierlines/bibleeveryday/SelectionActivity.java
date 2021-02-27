@@ -6,6 +6,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -23,7 +24,6 @@ import tk.hevselavierlines.bibleeveryday.ui.main.SectionsPagerAdapter;
 
 public class SelectionActivity extends AppCompatActivity {
 
-    private Bible bible;
     private int selectionBook;
     private int selectionChapter;
     private int selectionVerse;
@@ -51,7 +51,15 @@ public class SelectionActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        this.bible = Storage.getInstance().getBible();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("selectionBook", selectionBook);
+        outState.putInt("selectionChapter", selectionChapter);
+        outState.putInt("selectionVerse", selectionVerse);
+
     }
 
     public int getSelectionBook() {
