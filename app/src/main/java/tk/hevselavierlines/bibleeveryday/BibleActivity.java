@@ -64,7 +64,7 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             toolbar.setOnClickListener(this);
             setSupportActionBar(toolbar);
 
-            mViewFlipper = (ViewFlipper) this.findViewById(R.id.vfText);
+            mViewFlipper = this.findViewById(R.id.vfText);
 
             outFromLeft = AnimationUtils.loadAnimation(this, R.anim.out_from_left);
             inFromRight = AnimationUtils.loadAnimation(this, R.anim.in_from_right);
@@ -78,8 +78,8 @@ public class BibleActivity extends AppCompatActivity implements View.OnClickList
             tvToolbar.setOnClickListener(this);
 
 
-            tvPage1 = (TextView) findViewById(R.id.tvPage1);
-            tvPage2 = (TextView) findViewById(R.id.tvPage2);
+            tvPage1 = findViewById(R.id.tvPage1);
+            tvPage2 = findViewById(R.id.tvPage2);
 
             paginationController = new PaginationController(tvPage1, tvPage2, this);
             PageSwipeTouchListener pageSwipeTouchListener = new PageSwipeTouchListener(new PageSwipeTouchListener.PageChangeListener() {
