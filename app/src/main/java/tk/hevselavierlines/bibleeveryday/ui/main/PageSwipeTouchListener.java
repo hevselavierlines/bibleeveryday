@@ -118,6 +118,5 @@ public class PageSwipeTouchListener implements View.OnTouchListener {
     }
 
     public void onLongClick() {
-
     }
 }

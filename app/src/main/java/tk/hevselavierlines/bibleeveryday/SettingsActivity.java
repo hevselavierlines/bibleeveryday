@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -16,7 +18,8 @@ import android.widget.SpinnerAdapter;
 public class SettingsActivity extends AppCompatActivity {
 
     private EditText etVerses;
-    private Spinner spBibleVersion;
+    private RadioGroup rgVersion;
+    //private Spinner spBibleVersion;
     private final String[] BIBLE_VERSIONS = new String[] {"NIV", "schlachter", "volxbible"};
 
     @Override
@@ -25,7 +28,11 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         etVerses = findViewById(R.id.etSettingsVerses);
-        spBibleVersion = findViewById(R.id.spBibleVersion);
+        //spBibleVersion = findViewById(R.id.spBibleVersion);
+        rgVersion = findViewById(R.id.rgVersion);
+
+
+
         Button btSave = findViewById(R.id.btSettingsSave);
         Button btCancel = findViewById(R.id.btSettingsCancel);
         SeekBar sbTextSize = findViewById(R.id.sbTextSize);
@@ -36,6 +43,18 @@ public class SettingsActivity extends AppCompatActivity {
         sbTextSize.setProgress(textSize);
         etVerses.setText(String.valueOf(textSize));
 
+        int i = 0;
+        for(String bibleVersion : BIBLE_VERSIONS) {
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(bibleVersion);
+            radioButton.setId(i++);//set radiobutton id and store it somewhere
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+            if(bibleVersion.equals(currentVersion)) {
+                radioButton.setChecked(true);
+            }
+            rgVersion.addView(radioButton, params);
+        }
+        /*
         SpinnerAdapter adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, BIBLE_VERSIONS);
         spBibleVersion.setAdapter(adapter);
@@ -50,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
             if(selPos >= 0) {
                 spBibleVersion.setSelection(selPos, true);
             }
-        }
+        }*/
 
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +114,12 @@ public class SettingsActivity extends AppCompatActivity {
     private void sendResultToReturn() {
         Intent result = new Intent();
         result.putExtra("textSize", Integer.parseInt(etVerses.getText().toString()));
-        result.putExtra("version", spBibleVersion.getSelectedItem().toString());
+
+        int id = rgVersion.getCheckedRadioButtonId();
+        if(id < 0 || id >= BIBLE_VERSIONS.length) {
+            id = 0;
+        }
+        result.putExtra("version", BIBLE_VERSIONS[id]);
         setResult(0x03, result);
         finish();
     }
