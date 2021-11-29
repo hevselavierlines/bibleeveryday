@@ -15,12 +15,20 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
+import java.io.IOException;
+
 public class SettingsActivity extends AppCompatActivity {
 
     private EditText etVerses;
     private RadioGroup rgVersion;
     //private Spinner spBibleVersion;
-    private final String[] BIBLE_VERSIONS = new String[] {"NIV", "schlachter", "volxbible"};
+    private final String[] BIBLE_VERSIONS = new String[] {
+            "ENG_New_International_Version",
+            "ENG_Message",
+            "DEU_Elberfeld_1871",
+            "DEU_Luther_1545",
+            "DEU_Schlachter",
+            "DEU_Volxbible"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,15 @@ public class SettingsActivity extends AppCompatActivity {
         sbTextSize.setProgress(textSize);
         etVerses.setText(String.valueOf(textSize));
 
+ /*       try {
+            String[] elems = getAssets().list("");
+            for(String elem : elems) {
+                System.out.println(elem);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+ */
         int i = 0;
         for(String bibleVersion : BIBLE_VERSIONS) {
             RadioButton radioButton = new RadioButton(this);
