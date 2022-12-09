@@ -35,66 +35,77 @@
         android:id="@+id/linearLayoutNum"
         app:layout_constraintBottom_toTopOf="@+id/linearLayoutQ"
         tools:layout_editor_absoluteX="1dp">
+
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="1" />
+            android:text="1"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2" />
+            android:text="2"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="3" />
+            android:text="3"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="4" />
+            android:text="4"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="5" />
+            android:text="5"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="6" />
+            android:text="6"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="7" />
+            android:text="7"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="8" />
+            android:text="8"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="9" />
+            android:text="9"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/button0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="0" />
+            android:text="0"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,61 +119,71 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Q" />
+            android:text="Q"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonW"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="W" />
+            android:text="W"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="E" />
+            android:text="E"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="R" />
+            android:text="R"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="T" />
+            android:text="T"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonZ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Z" />
+            android:text="Z"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonU"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="U" />
+            android:text="U"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="I" />
+            android:text="I"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="O" />
+            android:text="O"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="P" />
+            android:text="P"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
     </LinearLayout>
 
     <LinearLayout
@@ -178,69 +199,79 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="A" />
+            android:text="A"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="S" />
+            android:text="S"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="D" />
+            android:text="D"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="F" />
+            android:text="F"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonG"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="G" />
+            android:text="G"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="H" />
+            android:text="H"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonJ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="J" />
+            android:text="J"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="K" />
+            android:text="K"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="L" />
+            android:text="L"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
         <Button
             android:id="@+id/buttonRet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="\u2190" />
+            android:text="\u2190"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
     </LinearLayout>
 
     <LinearLayout
@@ -256,56 +287,64 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Y" />
+            android:text="Y"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="X" />
+            android:text="X"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="C" />
+            android:text="C"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="V" />
+            android:text="V"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonBlank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="   " />
+            android:text="   "
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="B" />
+            android:text="B"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="N" />
+            android:text="N"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
 
         <Button
             android:id="@+id/buttonM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="M" />
+            android:text="M"
+            style="@style/Theme.BibleEveryDay.ButtonStyle"/>
     </LinearLayout>
 
 
