@@ -24,10 +24,17 @@
 
     <style name="Theme.BibleEveryDay.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme.BibleEveryDay.ButtonStyle">
-        <item name="android:layout_marginLeft">-5dip</item>
-        <item name="android:layout_marginRight">-5dip</item>
-        <item name="android:layout_marginTop">-5dip</item>
-        <item name="android:layout_marginBottom">-5dip</item>
+    <style name="Theme.BibleEveryDay.ButtonStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:layout_marginLeft">0dip</item>
+        <item name="android:layout_marginRight">0dip</item>
+        <item name="android:layout_marginTop">0dip</item>
+        <item name="android:layout_marginBottom">0dip</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:background">@drawable/keyboard_button</item>
+        <item name="android:shape">@drawable/keyboard_button</item>
+        <item name="iconTint">@drawable/keyboard_button</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:textSize">20dp</item>
     </style>
 </resources>

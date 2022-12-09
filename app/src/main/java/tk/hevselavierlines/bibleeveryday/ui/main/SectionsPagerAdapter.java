@@ -17,19 +17,25 @@ import tk.hevselavierlines.bibleeveryday.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.book, R.string.chapter, R.string.verse};
+    private static final int[] TAB_TITLES = new int[]{R.string.book, R.string.chapter, R.string.verse, R.string.search};
     private final Context mContext;
     private PlaceholderFragment[] fragments;
+    private SearchFragment searchFragment;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm, PlaceholderFragment[] fragments) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, PlaceholderFragment[] fragments, SearchFragment searchFragment) {
         super(fm);
         mContext = context;
         this.fragments = fragments;
+        this.searchFragment = searchFragment;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragments[position];
+        if(position <= 2) {
+            return fragments[position];
+        } else {
+            return searchFragment;
+        }
     }
 
     @Nullable
@@ -40,6 +46,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return fragments.length;
+        return TAB_TITLES.length;
     }
 }

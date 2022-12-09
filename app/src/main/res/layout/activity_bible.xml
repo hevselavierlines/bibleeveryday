@@ -17,23 +17,27 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/cardview_dark_background"
             android:layout_margin="0dp"
-            android:padding="0dp"
+            android:layout_marginLeft="-10dip"
+            android:background="@color/cardview_dark_background"
             android:elevation="4dp"
+            android:padding="0dp"
+            app:contentInsetStart="0dp"
             app:popupTheme="@style/Theme.BibleEveryDay.PopupOverlay">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="-6dip"
                 android:padding="0dp">
 
                 <Button
                     android:id="@+id/bible_back"
-                    android:layout_width="30dp"
+                    android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
                     android:backgroundTint="@color/cardview_dark_background"
+
                     app:icon="@android:drawable/ic_media_previous"
                     app:iconGravity="textStart" />
 
@@ -60,8 +64,8 @@
                     android:backgroundTint="@color/cardview_dark_background"
                     android:foregroundGravity="center"
                     android:gravity="start|fill"
-                    android:visibility="visible"
 
+                    android:visibility="visible"
                     app:icon="@android:drawable/ic_menu_more"
                     app:iconGravity="textEnd" />
 
@@ -73,9 +77,9 @@
                     android:layout_centerInParent="true"
                     android:backgroundTint="@color/cardview_dark_background"
                     android:gravity="center"
+
                     android:textAlignment="center"
                     app:icon="@android:drawable/ic_media_next"
-
                     app:iconGravity="textEnd" />
 
             </RelativeLayout>
