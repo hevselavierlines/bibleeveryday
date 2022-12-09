@@ -61,8 +61,8 @@
                     android:foregroundGravity="center"
                     android:gravity="start|fill"
                     android:visibility="visible"
-                    app:icon="@android:drawable/ic_menu_more"
 
+                    app:icon="@android:drawable/ic_menu_more"
                     app:iconGravity="textEnd" />
 
                 <Button

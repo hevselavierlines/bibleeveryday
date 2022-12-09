@@ -9,11 +9,18 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/selection_appbar"
         android:theme="@style/Theme.BibleEveryDay.AppBarOverlay">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/selectionToolbar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/selectionSearchButton"
+                app:icon="@android:drawable/ic_menu_search" />
         </androidx.appcompat.widget.Toolbar>
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -24,10 +31,23 @@
             app:tabSelectedTextColor="@color/white"
             app:tabIndicatorColor="@color/tertiary_grey" />
     </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <include
+        android:id="@+id/searchView"
+        layout="@layout/content_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_marginTop="60dp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/selection_appbar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

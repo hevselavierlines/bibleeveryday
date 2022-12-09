@@ -57,4 +57,12 @@ public class Verse implements Serializable {
         return ret;
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(chapter.getBook().getName())
+                .append(' ').append(chapter.getNumber())
+                .append(' ').append(number);
+        return sb.toString();
+    }
 }
