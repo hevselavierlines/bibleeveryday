@@ -27,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
             "ENG_Message",
             "DEU_Elberfeld_1871",
             "DEU_Luther_1545",
+            "DEU_HFA",
             "DEU_Schlachter",
             "DEU_Volxbible"};
 

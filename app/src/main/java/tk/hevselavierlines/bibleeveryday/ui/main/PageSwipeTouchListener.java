@@ -106,11 +106,7 @@ public class PageSwipeTouchListener implements View.OnTouchListener {
     }
 
     public void onClick(MotionEvent motionEvent) {
-        if(motionEvent.getX() > (float)mainTextView.getWidth() / 2) {
-            pageChangeListener.nextPage();
-        } else {
-            pageChangeListener.previousPage();
-        }
+
     }
 
     public void onDoubleClick() {
